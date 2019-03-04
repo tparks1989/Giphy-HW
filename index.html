@@ -4,10 +4,10 @@
         <meta charset="UTF-8">
         <title>Movie Giphs</title>
 
-        <!-- Added a link to Bootstrap-->
+      
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         
-        <!-- This links to the jQuery Library -->
+       
         <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
     	
     </head>
@@ -18,37 +18,37 @@
 <h4 class="text-center" style="color:white">Click on a title to display the coolest movie giphs. You also can add your
     own button with any movie search you choose. Enjoy!</h4>
 
-<!-- This will be where the buttons are added and displayed. -->
+
 <div id="buttonItems"></div>
 
-<!-- This is the form to add a space-themed button to the array. -->
+
 <form>
     <div class="row">
         <div class="col-md-3">
             <input type="text" id="space-input" class="form-control" placeholder="Choose a movie title...">
         </div>
-        <input id="addSpaceThing" type="submit" class="btn btn-success" value="Find your movie">
-        <!-- If there are any error messages, they will appear here -->
+        <input id="addMovieTitle" type="submit" class="btn btn-success" value="Find your movie">
+        
         <span id="entry" style="color: red; background: white"></span>
     </div>
 </form>
 
-<!-- This is where the ratings and images will be shown when the user clicks a movie button. --> 
+
 <div id="ratings"></div>
 
 
 
 
 
-<!-- Beginning of the javascript -->
+
 <script type="text/javascript">
-    // This is the initial array.
+    
 	var movieStuff = ["Iron Man", "Batman", "Guardians of the Galaxy", "Aqua Man", "Ant Man", "Wonder Woman", "Coming to America", "The Avengers", "Star Wars", "Gone in 60 seconds", "Space Jam", "Thor", "Captain America", "Home Alone", "Anchorman", "Step Brothers"];
     var movieImage = "";
-// This function shows all the buttons at the top of the page.
+
 function showButtons () {
     $("#buttonItems").empty();
-    $("#space-input").val("");
+    $("#movie-input").val("");
     for (var i = 0; i < movieStuff.length; i++) {
         var button = $("<button class='btn btn-primary'>");
         button.addClass("space");
@@ -59,14 +59,13 @@ function showButtons () {
     }
 }
 showButtons();
-// This runs when the user clicks "Make it so #1", it adds it to the button array and updates the buttons.
+
 $("#addSpaceThing").on("click", function(event) {
     $("#entry").empty();
     event.preventDefault();
-    var spaceInput = $("#space-input").val().trim();
+    var spaceInput = $("#movie-input").val().trim();
     var spaceTerm = $(this).attr("space-name");
-    // Test area to make sure the user's button has at least 10 giphs for it.
-    // If there aren't 10, an error message will be shown and no button will be created.
+   
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + spaceInput + "&limit=2&api_key=dc6zaTOxFJmzC";
         $.ajax({ url: queryURL, method: "GET"}).done(function(response) {
         if (response.pagination.total_count >= 10) {
@@ -76,43 +75,43 @@ $("#addSpaceThing").on("click", function(event) {
             $("#entry").html(" Sorry, there were no results for this.  Please try again."); }
         else if (response.pagination.total_count === 1) { $("#entry").html(" Sorry, there was only 1 result for this.  Please try again."); }
         else { $("#entry").html(" Sorry, there were only " + response.pagination.total_count + " results for this.  Please try again."); }
-        $("#space-input").val("");
+        $("#movie-input").val("");
         });
 });
 $(document).on("click", ".space", display);
 function display() {
-    // This is just to clear out any error message (if there is one)
+    
     $("#entry").empty();
     var spaceTerm = $(this).attr("space-name");
-    // The GIPHY query.  This limits to 10 results
+    
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + spaceTerm + "&limit=10&api_key=dc6zaTOxFJmzC";
     $.ajax({ url: queryURL, method: "GET"}).done(function(response) {
-        // This runs 10 times (limit is 10 in query) to show all the GIPHY pictures from the website's response.
+        
         for (var j = 0; j < response.data.length; j++) {
             
-            // Gets the animated gif URL
+            
             var active = response.data[j].images.fixed_width.url;
-            // Gets the still gif URL
+            
             var still = response.data[j].images.fixed_width_still.url;
             var rating = "Rating: " + (response.data[j].rating).toUpperCase();
-            // Creates the new img item
+            
             var spaceImage = $("<img>");
             
-            // This changes the text color of ratings to green so it can be seen against the space background image.
+            
             $("#ratings").css("color", "green");
-            // This creates a new div for the rating so that it maintains the gifs size
+            
             var ratingDiv = $("<div id='ratingDiv'>" + rating + "</div>");
             $(ratingDiv).css({"text-align":"center", "font-size":"20px", "width":"200", "display":"block"});
             spaceImage.attr({"active":active, "still":still, "src":still, "state":"still"});
-            // This holds the new div for both rating and the image. Every image will have a rating on top of it.
+            
             var ratingAndImage = $("<div>");
             $(ratingAndImage).css({"float":"left"});
             $(ratingAndImage).prepend(ratingDiv, spaceImage);
-            // This adds the rating and image to the page.
+            
             $("#ratings").prepend(ratingAndImage);
-            // When the user clicks on a picture, this will either start or stop the animation of that picture.
+            
             $(spaceImage).on("click", function(event) {
-                // This is just to clear out any error message (if there is one)
+                
                 $("#entry").empty();
                 
                 var state = $(this).attr("state");
