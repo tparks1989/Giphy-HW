@@ -25,7 +25,7 @@
 <form>
     <div class="row">
         <div class="col-md-3">
-            <input type="text" id="space-input" class="form-control" placeholder="Choose a movie title...">
+            <input type="text" id="movie-input" class="form-control" placeholder="Choose a movie title...">
         </div>
         <input id="addMovieTitle" type="submit" class="btn btn-success" value="Find your movie">
         
@@ -51,8 +51,8 @@ function showButtons () {
     $("#movie-input").val("");
     for (var i = 0; i < movieStuff.length; i++) {
         var button = $("<button class='btn btn-primary'>");
-        button.addClass("space");
-        button.attr("space-name", movieStuff[i]);
+        button.addClass("movie");
+        button.attr("movie-name", movieStuff[i]);
         button.text(movieStuff[i]);
         $("#buttonItems").append(button);
         $("#buttonItems").append(" ");
@@ -64,7 +64,7 @@ $("#addSpaceThing").on("click", function(event) {
     $("#entry").empty();
     event.preventDefault();
     var spaceInput = $("#movie-input").val().trim();
-    var spaceTerm = $(this).attr("space-name");
+    var spaceTerm = $(this).attr("movie-name");
    
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + spaceInput + "&limit=2&api_key=dc6zaTOxFJmzC";
         $.ajax({ url: queryURL, method: "GET"}).done(function(response) {
@@ -78,11 +78,11 @@ $("#addSpaceThing").on("click", function(event) {
         $("#movie-input").val("");
         });
 });
-$(document).on("click", ".space", display);
+$(document).on("click", ".movie", display);
 function display() {
     
     $("#entry").empty();
-    var spaceTerm = $(this).attr("space-name");
+    var spaceTerm = $(this).attr("movie-name");
     
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + spaceTerm + "&limit=10&api_key=dc6zaTOxFJmzC";
     $.ajax({ url: queryURL, method: "GET"}).done(function(response) {
@@ -95,22 +95,22 @@ function display() {
             var still = response.data[j].images.fixed_width_still.url;
             var rating = "Rating: " + (response.data[j].rating).toUpperCase();
             
-            var spaceImage = $("<img>");
+            var movieImage = $("<img>");
             
             
             $("#ratings").css("color", "green");
             
             var ratingDiv = $("<div id='ratingDiv'>" + rating + "</div>");
             $(ratingDiv).css({"text-align":"center", "font-size":"20px", "width":"200", "display":"block"});
-            spaceImage.attr({"active":active, "still":still, "src":still, "state":"still"});
+            movieImage.attr({"active":active, "still":still, "src":still, "state":"still"});
             
             var ratingAndImage = $("<div>");
             $(ratingAndImage).css({"float":"left"});
-            $(ratingAndImage).prepend(ratingDiv, spaceImage);
+            $(ratingAndImage).prepend(ratingDiv, movieImage);
             
             $("#ratings").prepend(ratingAndImage);
             
-            $(spaceImage).on("click", function(event) {
+            $(movieImage).on("click", function(event) {
                 
                 $("#entry").empty();
                 
